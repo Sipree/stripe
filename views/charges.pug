@@ -1,0 +1,4 @@
+html
+    body
+        each charge, index in charges
+            div Tx#: #{index}, amount: $#{charge.amount}, email: #{charge.source.name}, created: #{new Date(charge.created * 1000)}
