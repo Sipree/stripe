@@ -1,2 +1,2 @@
-h2 You successfully paid <strong>$5.00</strong>!
-
+h2 You successfully paid <strong>#{(amount / 100).toLocaleString("en-US", {style:"currency", currency:"USD"})}</strong>!
+a(href='/') Pay Another

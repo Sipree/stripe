@@ -1,4 +1,6 @@
 html
     body
         each charge, index in charges
-            div Tx#: #{index}, amount: $#{charge.amount}, email: #{charge.source.name}, created: #{new Date(charge.created * 1000)}
+            div Tx#: #{index}, amount: #{(charge.amount / 100).toLocaleString("en-US", {style:"currency", currency:"USD"})}, email: #{charge.source.name}, created: #{new Date(charge.created * 1000)}
+
+        a(href='/') Pay Another

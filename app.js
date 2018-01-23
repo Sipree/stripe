@@ -1,5 +1,6 @@
 const keyPublishable = process.env.PUBLISHABLE_KEY;
 const keySecret = process.env.SECRET_KEY;
+const transactionAmount = process.env.TRANSACTION_AMOUNT_IN_CENTS;
 
 const app = require("express")();
 const fs = require("fs");
@@ -18,7 +19,7 @@ app.set("view engine", "pug");
 app.use(require("body-parser").urlencoded({extended: false}));
 
 app.get("/", function (req, res) {
-    return res.render("index.pug", { keyPublishable: keyPublishable });
+    return res.render("index.pug", { keyPublishable: keyPublishable, transactionAmount: transactionAmount });
 });
 
 app.get("/charges", function (req, res) {
@@ -34,14 +35,12 @@ app.get("/data/charges", function (req, res) {
 });
 
 app.post("/charge", function (req, res) {
-    var amount = 500;
-
     stripe.customers.create({
         email: req.body.stripeEmail,
         source: req.body.stripeToken
     }).then(function (customer) {
         return stripe.charges.create({
-            amount: amount,
+            amount: transactionAmount,
             description: "Sample Charge",
             currency: "usd",
             customer: customer.id
@@ -49,7 +48,7 @@ app.post("/charge", function (req, res) {
     }).then(function (charge) {
         logChargeData(charge);
 
-        return res.render("confirmation.pug");
+        return res.render("confirmation.pug", { keyPublishable: keyPublishable, amount: charge.amount });
     });
 });
 
